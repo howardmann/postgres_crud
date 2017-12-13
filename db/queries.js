@@ -11,6 +11,7 @@ let Queries = function(table){
   this.update = (id, updates) => Table().where('id', parseInt(id)).update(updates).returning('*')
   this.delete = (id) => Table().where('id', parseInt(id)).del()
   this.destroyAll = () => Table().del()
+  this.resetId = () => knex.raw(`ALTER SEQUENCE ${table}_id_seq RESTART WITH 1`)
 }
 
 module.exports = Queries

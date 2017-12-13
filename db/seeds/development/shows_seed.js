@@ -5,6 +5,8 @@ let Show = new Queries('shows')
 exports.seed = async function(knex, Promise) {
   // Clear out the DB
   await Show.destroyAll()
+  // RESET increment
+  await Show.resetId()
 
   // Declare objects to be created
   let suits = {
