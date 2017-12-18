@@ -31,7 +31,6 @@ describe('#Shows', function () {
             name: 'Suits',
             channel: 'USA Network',
             genre: 'Drama',
-            rating: 3,
             explicit: false
           },
           {
@@ -39,7 +38,6 @@ describe('#Shows', function () {
             name: 'Game of Thrones',
             channel: 'HBO',
             genre: 'Fantasy',
-            rating: 5,
             explicit: true
           },
           {
@@ -47,7 +45,6 @@ describe('#Shows', function () {
             name: 'South Park',
             channel: 'Comedy Central',
             genre: 'Comedy',
-            rating: 4,
             explicit: true
           },
           {
@@ -55,7 +52,6 @@ describe('#Shows', function () {
             name: 'Mad Men',
             channel: 'AMC',
             genre: 'Drama',
-            rating: 3,
             explicit: false
           }
         ]
@@ -74,7 +70,6 @@ describe('#Shows', function () {
           name: 'Suits',
           channel: 'USA Network',
           genre: 'Drama',
-          rating: 3,
           explicit: false
         }
         expect(input).to.eql(actual)
@@ -87,7 +82,6 @@ describe('#Shows', function () {
       name: 'Mr Robot',
       channel: 'USA Network',
       genre: 'Drama',
-      rating: 5,
       explicit: true
     }
     chai.request(app)
@@ -95,7 +89,7 @@ describe('#Shows', function () {
       .send(mrRobot)
       .end(function(err, res){
         mrRobot.id = 5
-        let input = res.body[0]        
+        let input = res.body
         let actual = mrRobot
         expect(input).to.eql(actual)
         done()
@@ -115,7 +109,6 @@ describe('#Shows', function () {
           name: 'Suits 2',
           channel: 'USA Network',
           genre: 'Drama',
-          rating: 3,
           explicit: false
         }
         expect(input).to.eql(actual)

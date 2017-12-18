@@ -7,7 +7,8 @@ let Queries = function(table){
 
   this.find = () => Table().select()
   this.findById = (id) => Table().where('id', parseInt(id)).first()
-  this.create = (body) => Table().insert(body).returning('*')
+  this.findBy = (property, name) => Table().where(property, name)
+  this.create = (body) => Table().insert(body).returning('*').then(result => result[0])
   this.update = (id, updates) => Table().where('id', parseInt(id)).update(updates).returning('*')
   this.delete = (id) => Table().where('id', parseInt(id)).del()
   this.destroyAll = () => Table().del()
