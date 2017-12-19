@@ -1,5 +1,7 @@
 let Queries = require('../db/queries');
 let Show = new Queries('shows')
+let Comment = new Queries('comments')
+let knex = require('../db/knex')
 
 exports.index = function (req, res, next) {
   Show.find()
@@ -14,12 +16,11 @@ exports.create = function (req, res, next) {
 };
 
 exports.show = function (req, res, next) {
-  Show.findById(req.params.id)
-    .then((data) => {
-      res.json(data)
-    })
-    .catch(next);
+  Show.findByIdJoin(req.params.id, 'comments')
+    .then(result => res.send(result))
+    .catch(next)
 };
+
 
 exports.update = function (req, res, next) {
   Show.update(req.params.id, req.body)

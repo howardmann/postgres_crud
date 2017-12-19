@@ -65,13 +65,14 @@ describe('#Shows', function () {
       .get('/shows/1')
       .end(function(err, res){
         let input = res.body
-        let actual = {
+        let actual = [{
           id: 1,
           name: 'Suits',
           channel: 'USA Network',
           genre: 'Drama',
-          explicit: false
-        }
+          explicit: false,
+          comments: [{ id: 1, show_id: 1, description: 'Suits is the best', rating: 5 }]
+        }]
         expect(input).to.eql(actual)
         done()
       })
