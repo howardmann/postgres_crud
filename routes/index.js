@@ -14,4 +14,13 @@ router
   .put('/shows/:id', shows.update)
   .delete('/shows/:id', shows.delete)
 
+  // // Comments CRUD
+var comments = require('./comments.js');
+router
+  .get('/comments', comments.index)
+  .post('/comments', comments.create)
+  .get('/comments/:id', comments.show)
+  .put('/comments/:id', comments.update)
+  .delete('/comments/:id', comments.delete)
+
 module.exports = router;
