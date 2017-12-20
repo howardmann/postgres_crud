@@ -9,6 +9,7 @@ router.get('/', (req, res, next) => {
 var shows = require('./shows.js');
 router
   .get('/shows', shows.index)
+  .get('/showsTopics', shows.showTopics)
   .post('/shows', shows.create)
   .get('/shows/:id', shows.show)
   .put('/shows/:id', shows.update)

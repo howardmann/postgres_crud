@@ -2,6 +2,8 @@
 let Queries = require('../../queries');
 let Show = new Queries('shows')
 let Comment = new Queries('comments')
+let Topic = new Queries('topics')
+let ShowTopic = new Queries('shows_topics')
 
 exports.seed = async function (knex, Promise) {
   // Clear out the DB
@@ -81,4 +83,20 @@ exports.seed = async function (knex, Promise) {
   await Comment.update(gotComment.id, { show_id: got.id })
   await Comment.update(southParkComment.id, { show_id: southPark.id })
   await Comment.update(southParkComment2.id, { show_id: southPark.id })
+
+  // Clear out the DB
+  await Topic.destroyAll()
+  // RESET increment
+  await Topic.resetId()
+  let funny = await Topic.create({ name: 'Funny' })
+  let scary = await Topic.create({ name: 'Scary' })
+  let powerful = await Topic.create({ name: 'Powerful' })
+  let dramatic = await Topic.create({ name: 'Dramatic' })
+
+  await ShowTopic.destroyAll()
+  await ShowTopic.create({ show_id: southPark.id, topic_id: funny.id })
+  await ShowTopic.create({ show_id: got.id, topic_id: dramatic.id })
+  await ShowTopic.create({ show_id: got.id, topic_id: powerful.id })
+  await ShowTopic.create({ show_id: madMen.id, topic_id: funny.id })
+  await ShowTopic.create({ show_id: madMen.id, topic_id: dramatic.id })
 };

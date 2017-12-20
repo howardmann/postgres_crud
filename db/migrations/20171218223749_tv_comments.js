@@ -4,7 +4,7 @@ exports.up = function(knex, Promise) {
     table.increments('id');
     table.integer('show_id').unsigned().references('shows.id').onDelete('set null');;
     table.string('description').notNullable();
-    table.integer('rating').notNullable();
+    table.integer('rating');
   });  
   
 };
