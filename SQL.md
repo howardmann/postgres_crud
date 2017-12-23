@@ -47,7 +47,6 @@ CREATE TABLE Genres_Movies (
   movie_id int REFERENCES movies,
   genre_id int REFERENCES genres
 );
-
 ```
 ## 2. Seed database
 Seed movies
@@ -57,18 +56,32 @@ DELETE FROM Movies;
 -- REST SERIAL PRIMARY KEY
 ALTER SEQUENCE movies_id_seq RESTART WITH 1;
 -- SEED NEW DATA
-INSERT INTO Movies (title, duration) VALUES
-('Alien', 120),
-('Alien 2', 140),
-('Jaws', 100),
-('The Hobbit', 300),
-('Gravity', 60);
+INSERT INTO Movies (id, title, duration) VALUES
+(1, 'Alien', 120),
+(2, 'Alien 2', 140),
+(3, 'Jaws', 100),
+(4, 'The Hobbit', 300),
+(5, 'Gravity', 60);
 -- LIST ALL MOVIES
 SELECT * FROM Movies;
 ```
+Seed reviews
+```sql
+-- DELETE EXISTING DATA
+DELETE FROM Reviews;
+-- REST SERIAL PRIMARY KEY
+ALTER SEQUENCE reviews_id_seq RESTART WITH 1;
+-- SEED NEW DATA
+INSERT INTO Reviews (movie_id, description, rating) VALUES
+(5, 'So short and sweet', 10),
+(3, 'I love sharks', 10),
+(3, 'Sharks scare me', 1),
+(1, 'Aliens are so scary', 5);
+-- LIST ALL MOVIES
+SELECT * FROM Reviews;
 
+```
 <!-- TODO -->
-<!-- SEED Reviews -->
 <!-- SEED Genres -->
 <!-- MAKE ASSOCIATIONS -->
 <!-- MAKE JOIN QUERIES -->
