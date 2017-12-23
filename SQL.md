@@ -231,3 +231,23 @@ WHERE name = 'Horror';
 --   1 | Alien |      120 |        1 |        4 |  4 | Horror
 --   3 | Jaws  |      100 |        3 |        4 |  4 | Horror
 ```
+
+Genre `has_many` Reviews `through` Movies
+
+```sql
+-- Find all reviews with the genre of horror
+SELECT Reviews.description AS review, Movies.title AS movie, Genres.name AS genre
+From Genres
+INNER JOIN Genres_Movies
+ON Genres_Movies.genre_id = Genres.id
+INNER JOIN Movies
+ON Movies.id = Genres_Movies.movie_id
+INNER JOIN Reviews
+ON Reviews.movie_id = Movies.id
+WHERE name = 'Horror';
+--        review        | movie | genre
+-- ---------------------+-------+--------
+--  I love sharks       | Jaws  | Horror
+--  Sharks scare me     | Jaws  | Horror
+--  Aliens are so scary | Alien | Horror
+```
