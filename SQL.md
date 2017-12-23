@@ -65,7 +65,7 @@ INSERT INTO Movies (id, title, duration) VALUES
 -- LIST ALL MOVIES
 SELECT * FROM Movies;
 ```
-Seed reviews
+Seed reviews for movies
 ```sql
 -- DELETE EXISTING DATA
 DELETE FROM Reviews;
@@ -79,9 +79,23 @@ INSERT INTO Reviews (movie_id, description, rating) VALUES
 (1, 'Aliens are so scary', 5);
 -- LIST ALL MOVIES
 SELECT * FROM Reviews;
-
 ```
+Seed genres
+```sql
+-- DELETE EXISTING DATA
+DELETE FROM Genres;
+-- REST SERIAL PRIMARY KEY
+ALTER SEQUENCE genres_id_seq RESTART WITH 1;
+-- SEED NEW DATA
+INSERT INTO Genres (name) VALUES
+('Drama'),
+('Action'),
+('Comedy'),
+('Horror');
+-- LIST ALL MOVIES
+SELECT * FROM Genres;
+```
+
 <!-- TODO -->
-<!-- SEED Genres -->
 <!-- MAKE ASSOCIATIONS -->
 <!-- MAKE JOIN QUERIES -->
