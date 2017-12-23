@@ -87,15 +87,147 @@ DELETE FROM Genres;
 -- REST SERIAL PRIMARY KEY
 ALTER SEQUENCE genres_id_seq RESTART WITH 1;
 -- SEED NEW DATA
-INSERT INTO Genres (name) VALUES
-('Drama'),
-('Action'),
-('Comedy'),
-('Horror');
+INSERT INTO Genres (id, name) VALUES
+(1, 'Drama'),
+(2, 'Action'),
+(3, 'Comedy'),
+(4, 'Horror');
 -- LIST ALL MOVIES
 SELECT * FROM Genres;
 ```
+Associate movies to genres
+```sql
+-- DELETE EXISTING DATA
+DELETE FROM Genres_Movies;
+-- SEED NEW DATA
+INSERT INTO Genres_Movies (movie_id, genre_id) VALUES
+(1, 2),
+(1, 4),
+(2, 2),
+(3, 4),
+(4, 1),
+(5, 1);
+-- LIST ALL MOVIES
+SELECT * FROM Genres_Movies;
+```
+## 3. Queries
 
-<!-- TODO -->
-<!-- MAKE ASSOCIATIONS -->
-<!-- MAKE JOIN QUERIES -->
+Basic queries
+```sql
+-- Find all movies and return all properties
+SELECT * FROM Movies;
+
+--  id |   title    | duration
+-- ----+------------+----------
+--   1 | Alien      |      120
+--   2 | Alien 2    |      140
+--   3 | Jaws       |      100
+--   4 | The Hobbit |      300
+--   5 | Gravity    |       60
+
+-- Find all movies and return title and duration property
+SELECT title, duration FROM Movies;
+--    title    | duration
+-- ------------+----------
+--  Alien      |      120
+--  Alien 2    |      140
+--  Jaws       |      100
+--  The Hobbit |      300
+--  Gravity    |       60
+
+-- Find all rows where movie title = 'Alien'
+SELECT * FROM movies WHERE title = 'Alien';
+--  id | title | duration
+-- ----+-------+----------
+--   1 | Alien |      120
+
+-- Find all movie rows where duration is > 80
+SELECT * FROM movies WHERE duration > 80;
+--  id |   title    | duration
+-- ----+------------+----------
+--   1 | Alien      |      120
+--   2 | Alien 2    |      140
+--   3 | Jaws       |      100
+--   4 | The Hobbit |      300
+
+-- Find all movie rows where duration > 80 and order by duration descending
+SELECT * FROM movies WHERE duration > 80 ORDER BY duration DESC;
+--  id |   title    | duration
+-- ----+------------+----------
+--   4 | The Hobbit |      300
+--   2 | Alien 2    |      140
+--   1 | Alien      |      120
+--   3 | Jaws       |      100
+
+-- Find all movies where the title is not equal to Alien
+SELECT * FROM movies WHERE title <> 'Alien'; 
+--  id |   title    | duration
+-- ----+------------+----------
+--   2 | Alien 2    |      140
+--   3 | Jaws       |      100
+--   4 | The Hobbit |      300
+--   5 | Gravity    |       60
+```
+
+JOIN queries: Movie `has_many` Reviews
+```sql
+-- Find all movies with reviews and list all reviews
+-- Use INNER JOIN to find the intersection between movies and reviews. Think venn diagram overlap
+SELECT * FROM Movies
+INNER JOIN Reviews
+ON Movies.id=Reviews.movie_id;
+--  id |  title  | duration | id | movie_id |     description     | rating
+-- ----+---------+----------+----+----------+---------------------+--------
+--   1 | Alien   |      120 |  4 |        1 | Aliens are so scary |      5
+--   3 | Jaws    |      100 |  3 |        3 | Sharks scare me     |      1
+--   3 | Jaws    |      100 |  2 |        3 | I love sharks       |     10
+--   5 | Gravity |       60 |  1 |        5 | So short and sweet  |     10
+
+-- Find all movies regardless if they have reviews and list all reviews
+-- Use LEFT OUTER JOIN
+SELECT * FROM Movies 
+LEFT OUTER JOIN Reviews 
+ON Movies.id=Reviews.movie_id;
+--  id |   title    | duration | id | movie_id |     description     | rating
+-- ----+------------+----------+----+----------+---------------------+--------
+--   1 | Alien      |      120 |  4 |        1 | Aliens are so scary |      5
+--   2 | Alien 2    |      140 |    |          |                     |
+--   3 | Jaws       |      100 |  3 |        3 | Sharks scare me     |      1
+--   3 | Jaws       |      100 |  2 |        3 | I love sharks       |     10
+--   4 | The Hobbit |      300 |    |          |                     |
+--   5 | Gravity    |       60 |  1 |        5 | So short and sweet  |     10
+
+-- Using table alias
+SELECT * FROM Reviews r
+INNER JOIN Movies m
+ON r.movie_id=m.id
+WHERE m.title = 'Jaws';
+--  id | movie_id |   description   | rating | id | title | duration
+-- ----+----------+-----------------+--------+----+-------+----------
+--   2 |        3 | I love sharks   |     10 |  3 | Jaws  |      100
+--   3 |        3 | Sharks scare me |      1 |  3 | Jaws  |      100
+```
+OUTER JOIN queries: Movie `has_and_belongs_to_many` Genres
+```sql
+-- Find the genres of all movies
+SELECT title, duration, Genres.name 
+FROM Movies
+INNER JOIN Genres_Movies
+ON Movies.id = Genres_Movies.movie_id
+INNER JOIN Genres
+ON Genres_Movies.genre_id = Genres.id;
+
+-- Find all movies with the genre Horror
+SELECT * 
+From Movies
+INNER JOIN Genres_Movies
+ON Movies.id = Genres_Movies.movie_id
+INNER JOIN Genres
+ON Genres_Movies.genre_id = Genres.id
+WHERE name = 'Horror';
+
+--  id | title | duration | movie_id | genre_id | id |  name
+-- ----+-------+----------+----------+----------+----+--------
+--   1 | Alien |      120 |        1 |        4 |  4 | Horror
+--   3 | Jaws  |      100 |        3 |        4 |  4 | Horror
+```
