@@ -251,3 +251,32 @@ WHERE name = 'Horror';
 --  Sharks scare me     | Jaws  | Horror
 --  Aliens are so scary | Alien | Horror
 ```
+Join queries with `json_agg`
+```sql
+-- Find all movies with reviews as json array
+SELECT Movies.*, json_agg(Reviews)
+FROM Movies
+INNER JOIN Reviews
+ON Reviews.movie_id = Movies.id
+GROUP BY Movies.id;
+--  id |  title  | duration |                                json_agg
+-- ----+---------+----------+------------------------------------------------------------------------
+--   1 | Alien   |      120 | [{"id":4,"movie_id":1,"description":"Aliens are so scary","rating":5}]
+--   5 | Gravity |       60 | [{"id":1,"movie_id":5,"description":"So short and sweet","rating":10}]
+--   3 | Jaws    |      100 | [{"id":3,"movie_id":3,"description":"Sharks scare me","rating":1},    +
+--     |         |          |  {"id":2,"movie_id":3,"description":"I love sharks","rating":10}]
+
+
+-- Find all movies with reviews pretty print
+SELECT Movies.title, json_agg(json_build_object('comment', Reviews.description, 'rating',Reviews.rating)) AS reviews
+  FROM Movies
+  INNER JOIN Reviews
+  ON Reviews.movie_id = Movies.id
+GROUP BY Movies.id;
+
+--   title  |                                            reviews
+-- ---------+-----------------------------------------------------------------------------------------------
+--  Alien   | [{"comment" : "Aliens are so scary", "rating" : 5}]
+--  Gravity | [{"comment" : "So short and sweet", "rating" : 10}]
+--  Jaws    | [{"comment" : "Sharks scare me", "rating" : 1}, {"comment" : "I love sharks", "rating" : 10}]
+```
