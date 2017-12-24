@@ -17,7 +17,7 @@ Race.findById = (raceId) => {
       ON planets.id = planets_races.planet_id
     WHERE races.id = ${raceId}
     GROUP BY races.id     
-  `)
+  `).then(data => data.rows)
 }
 
 Race.find = () => {
@@ -29,7 +29,7 @@ Race.find = () => {
     LEFT OUTER JOIN planets
       ON planets.id = planets_races.planet_id
     GROUP BY races.name  
-  `)
+  `).then(data => data.rows)
 }
 
 Race.attachPlanets = (raceId, planetIdArr) => {

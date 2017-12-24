@@ -4,6 +4,7 @@ var router = express.Router();
 // Require controllers
 let races = require('../controllers/races.js');
 let champions = require('../controllers/champions.js');
+let planets = require('../controllers/planets.js');
 
 
 // Home page
@@ -20,6 +21,11 @@ router
 router
   .get('/champions', champions.index)
   .post('/champions', champions.create)
+
+router
+  .get('/planets', planets.index)
+  .get('/planets/:id', planets.show)
+  .post('/planets', planets.create)
 
 
 module.exports = router;

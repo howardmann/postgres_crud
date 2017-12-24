@@ -2,13 +2,13 @@ let Race = require('../models/race');
 
 exports.index = function (req, res, next) {
   Race.find()  
-    .then(data => res.json(data.rows))
+    .then(data => res.json(data))
     .catch(next)
 };
 
 exports.show = function (req, res, next) {
   Race.findById(req.params.id)    
-    .then(data => res.json(data.rows))
+    .then(data => res.json(data))
     .catch(next)  
 }
 
