@@ -44,6 +44,8 @@ exports.seed = async function (knex, Promise) {
     (3, 'Aiur');
   `)
 
+  await knex.raw(`SELECT setval('planets_id_seq', (SELECT MAX(id) FROM planets)+1);`)
+
   // ===PLANETS RACES ASSOCIATION
   // Clear out the DB
   await knex.raw('DELETE FROM Planets_Races')

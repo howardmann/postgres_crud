@@ -90,4 +90,16 @@ describe('#Planets', function () {
       });
   });
 
+  it('POST /planets should CREATE a new planet', function (done) {
+    chai.request(app)
+      .post('/planets')
+      .send({ name: 'Earth' })
+      .end(function (err, res) {
+        let input = res.body
+        let actual = { id: 5, name: 'Earth' }
+        expect(input).to.eql(actual)
+        done();
+      });
+  });
+
 });
