@@ -8,11 +8,11 @@ exports.seed = async function (knex, Promise) {
   await knex.raw('ALTER SEQUENCE races_id_seq RESTART WITH 1')
   // Seed
   await knex.raw(`
-    INSERT INTO Races (name) VALUES
-    ('Zerg'),
-    ('Protoss'),
-    ('Terran'),
-    ('Xel Naga')
+    INSERT INTO Races (name, affiliation) VALUES
+    ('Zerg', 'Evil'),
+    ('Protoss', 'Technology'),
+    ('Terran', 'Machine'),
+    ('Xel Naga', 'Psychic')
   `)
   // Reset the auto increment interval 
   // await knex.raw(`SELECT setval('races_id_seq', (SELECT MAX(id) FROM races)+1);`)
@@ -43,6 +43,8 @@ exports.seed = async function (knex, Promise) {
     (2, 'Char'),
     (3, 'Aiur');
   `)
+
+  await knex.raw(`SELECT setval('planets_id_seq', (SELECT MAX(id) FROM planets)+1);`)
 
   // ===PLANETS RACES ASSOCIATION
   // Clear out the DB

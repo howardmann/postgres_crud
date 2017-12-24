@@ -13,18 +13,18 @@ exports.show = function (req, res, next) {
 }
 
 exports.update = function (req, res, next) {
-  let {name, planet_id} = req.body
+  let {name, planet_id, affiliation} = req.body
   let raceId = req.params.id
   
   Race.attachPlanets(raceId, planet_id)
-    .then(() => Race.update(raceId, { name }))    
+    .then(() => Race.update(raceId, { name, affiliation }))    
     .then(() => res.redirect(`/races/${raceId}`))
     .catch(next)
 }
 
 exports.create = function (req, res, next) {
-  let { name, planet_id } = req.body
-  Race.create({name})  
+  let { name, planet_id, affiliation } = req.body
+  Race.create({name, affiliation})  
     .then(data => Race.attachPlanets(data.id, planet_id))
     .then((raceId) => res.redirect(`/races/${raceId}`))
     .catch(next)

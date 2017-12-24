@@ -5,6 +5,7 @@ let expect = chai.expect;
 chai.use(chaiHttp);
 
 let util = require('util')
+let _ = require('lodash')
 
 // App dependencies
 let app = require('../server.js');
@@ -26,8 +27,8 @@ describe('#Races', function () {
     chai.request(app)
       .get('/races')
       .end(function (err, res) {
-        let input = res.body
-        let actual = [
+        let input = _.sortBy(res.body,'name')
+        let data = [
           {
             name: "Zerg",
             planets: [
@@ -54,6 +55,7 @@ describe('#Races', function () {
             ]
           }
         ]
+        let actual = _.sortBy(data, 'name')
         expect(input).to.eql(actual)
         done();
       });
@@ -68,6 +70,7 @@ describe('#Races', function () {
           id: 1,
           name: 'Zerg',
           planets: ['Char', 'Aiur'],
+          affiliation: 'Evil',
           champions: ['Sarah Kerrigan']
         }]
         // console.log(util.inspect(input, false, null))
@@ -81,6 +84,7 @@ describe('#Races', function () {
       .post('/races')
       .send({
         name: 'Human',
+        affiliation: 'Tasty',
         planet_id: [1]
       })
       .end(function (err, res) {
@@ -89,6 +93,7 @@ describe('#Races', function () {
           id: 5,
           name: 'Human',
           planets: ['Korhal'],
+          affiliation: 'Tasty',
           champions: [null]
         }]
         expect(input).to.eql(actual)
@@ -109,6 +114,7 @@ describe('#Races', function () {
           id: 2,
           name: 'Protosses!',
           planets: ['Korhal', 'Char', 'Aiur'],
+          affiliation: 'Technology',
           champions: ['Artanis']
         }]
         expect(input).to.eql(actual)
@@ -128,6 +134,7 @@ describe('#Races', function () {
           id: 2,
           name: 'Protosses Boom!',
           planets: ['Aiur'],
+          affiliation: 'Technology',
           champions: ['Artanis']
         }]
         expect(input).to.eql(actual)
