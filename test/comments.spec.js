@@ -75,7 +75,7 @@ describe('#Comments', function () {
   })
 
   it('POST /comments should create a SINGLE comment', function (done) {
-    Show.findBy('name', 'Game of Thrones')
+    Show.findBy('name', 'game of thrones')
       .then(result => {
         let show = result[0] 
         return {
