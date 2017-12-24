@@ -10,7 +10,9 @@ let races = require('./races.js');
 router
   .get('/races', races.index)
   .get('/races/:id', races.show)
+  .post('/races', races.create)
   .put('/races/:id', races.update)
+
 
   // // Champions CRUD
 let champions = require('./champions.js');

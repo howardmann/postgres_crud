@@ -76,6 +76,26 @@ describe('#Races', function () {
       });
   });
 
+  it('POST /races should add a SINGLE race with associations planets', function (done) {
+    chai.request(app)
+      .post('/races')
+      .send({
+        name: 'Human',
+        planet_id: [1]
+      })
+      .end(function (err, res) {
+        let input = res.body
+        let actual = [{
+          id: 5,
+          name: 'Human',
+          planets: ['Korhal'],
+          champions: [null]
+        }]
+        expect(input).to.eql(actual)
+        done();
+      });        
+  })
+
   it('PUT /races/:id should update race and planet if given planet_id', function(done){
     chai.request(app)
       .put('/races/2')

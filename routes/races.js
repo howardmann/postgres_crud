@@ -65,3 +65,14 @@ exports.update = function (req, res, next) {
     .then(() => res.redirect(`/races/${raceId}`))
     .catch(next)
 }
+
+exports.create = function (req, res, next) {
+  let { name, planet_id } = req.body
+  Race.create({name})  
+    .then(data => {
+      let raceId = data.id
+      return updateRacePlanet(raceId, planet_id)
+    })
+    .then((raceId) => res.redirect(`/races/${raceId}`))
+    .catch(next)
+}

@@ -8,12 +8,14 @@ exports.seed = async function (knex, Promise) {
   await knex.raw('ALTER SEQUENCE races_id_seq RESTART WITH 1')
   // Seed
   await knex.raw(`
-    INSERT INTO Races (id, name) VALUES
-    (1, 'Zerg'),
-    (2, 'Protoss'),
-    (3, 'Terran'),
-    (4, 'Xel Naga');
+    INSERT INTO Races (name) VALUES
+    ('Zerg'),
+    ('Protoss'),
+    ('Terran'),
+    ('Xel Naga')
   `)
+  // Reset the auto increment interval 
+  // await knex.raw(`SELECT setval('races_id_seq', (SELECT MAX(id) FROM races)+1);`)
 
   // ======CHAMPIONS
   // Clear out the DB
