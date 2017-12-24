@@ -1,6 +1,4 @@
-let knex = require('../db/knex')
-let Queries = require('../db/queries');
-let Champion = new Queries('champions')
+let Champion = require('../models/champion');
 
 exports.index = function (req, res, next) {
   Champion.find()

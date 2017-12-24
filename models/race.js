@@ -1,9 +1,11 @@
+// Dependencies
 let knex = require('../db/knex')
 let Queries = require('../db/queries');
-let Race = new Queries('races')
-let PlanetRace = new Queries('planets_races')
 
-let getRaceById = (raceId) => {
+let Race = new Queries('races')
+
+// Override default queries
+Race.findById = (raceId) => {
   return knex.raw(`
     SELECT races.*, json_agg(planets.name) AS planets, json_agg(DISTINCT champions.name) AS champions
       FROM races
@@ -18,7 +20,7 @@ let getRaceById = (raceId) => {
   `)
 }
 
-let getRaces = () => {
+Race.find = () => {
   return knex.raw(`
     SELECT races.name, json_agg(planets.name) AS planets
       FROM races
@@ -27,16 +29,16 @@ let getRaces = () => {
     LEFT OUTER JOIN planets
       ON planets.id = planets_races.planet_id
     GROUP BY races.name  
-  `)  
+  `)
 }
 
-let updateRacePlanet = (raceId, planetIdArr) => {
+Race.attachPlanets = (raceId, planetIdArr) => {
   return new Promise(resolve => {
     if (!planetIdArr) {
       return resolve()
     }
-    
-    let updateQueryArr = planetIdArr.map(planetId => knex.raw(`INSERT INTO planets_races (race_id, planet_id) VALUES (${raceId}, ${planetId})`))    
+
+    let updateQueryArr = planetIdArr.map(planetId => knex.raw(`INSERT INTO planets_races (race_id, planet_id) VALUES (${raceId}, ${planetId})`))
     // Delete associations and then rebuild
     knex.raw(`DELETE FROM planets_races WHERE race_id = ${raceId}`)
       .then(() => Promise.all(updateQueryArr))
@@ -44,32 +46,4 @@ let updateRacePlanet = (raceId, planetIdArr) => {
   })
 }
 
-exports.index = function (req, res, next) {
-  getRaces()  
-    .then(data => res.json(data.rows))
-    .catch(next)
-};
-
-exports.show = function (req, res, next) {
-  getRaceById(req.params.id)    
-    .then(data => res.json(data.rows))
-    .catch(next)  
-}
-
-exports.update = function (req, res, next) {
-  let {name, planet_id} = req.body
-  let raceId = req.params.id
-  
-  updateRacePlanet(raceId, planet_id)
-    .then(() => Race.update(raceId, { name }))    
-    .then(() => res.redirect(`/races/${raceId}`))
-    .catch(next)
-}
-
-exports.create = function (req, res, next) {
-  let { name, planet_id } = req.body
-  Race.create({name})  
-    .then(data => updateRacePlanet(data.id, planet_id))
-    .then((raceId) => res.redirect(`/races/${raceId}`))
-    .catch(next)
-}
+module.exports = Race
