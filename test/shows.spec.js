@@ -78,6 +78,23 @@ describe('#Shows', function () {
       })
   })
 
+  it('GET /showsName/:name should list ALL matching row', function(done){
+    chai.request(app)
+      .get('/showsName/suits')
+      .end(function(err, res){
+        let input = res.body
+        let actual = [{
+          id: 1,
+          name: 'Suits',
+          channel: 'USA Network',
+          genre: 'Drama',
+          explicit: false
+        }]
+        expect(input).to.eql(actual)
+        done()
+      })
+  })
+
   it('POST /shows should create a SINGLE show', function(done){
     let mrRobot = {
       name: 'Mr Robot',
@@ -129,6 +146,48 @@ describe('#Shows', function () {
             expect(input).to.equal(actual)
             done()
           })
+      })
+  })
+
+  it('GET /showsTopics should return all shows and related topic', function(done){
+    chai.request(app)
+      .get('/showsTopics')
+      .end(function (err, res) {
+        let input = res.body
+        let actual = [{
+          id: 1,
+          name: 'Suits',
+          channel: 'USA Network',
+          genre: 'Drama',
+          explicit: false,
+          topics: [null]
+        },
+        {
+          id: 3,
+          name: 'South Park',
+          channel: 'Comedy Central',
+          genre: 'Comedy',
+          explicit: true,
+          topics: ['Funny']
+        },
+        {
+          id: 4,
+          name: 'Mad Men',
+          channel: 'AMC',
+          genre: 'Drama',
+          explicit: false,
+          topics: ['Funny', 'Dramatic']
+        },
+        {
+          id: 2,
+          name: 'Game of Thrones',
+          channel: 'HBO',
+          genre: 'Fantasy',
+          explicit: true,
+          topics: ['Dramatic', 'Powerful']
+        }]
+        expect(input).to.eql(actual)
+        done()
       })
   })
 

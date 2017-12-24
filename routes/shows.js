@@ -10,16 +10,29 @@ exports.index = function (req, res, next) {
 };
 
 exports.showTopics = function (req, res, next) {
-  knex('shows')
-    .join('shows_topics', 'shows_topics.show_id', 'shows.id')
-    .join('topics', 'shows_topics.topic_id', 'topics.id')
-    .select([
-      'shows.*',
-      knex.raw('json_agg(topics.*) as topic')
-    ])
-    .groupBy('shows.id')
-    .then(data => res.json(data))
-    .catch(next)  
+  // knex('shows')
+  //   .join('shows_topics', 'shows_topics.show_id', 'shows.id')
+  //   .join('topics', 'shows_topics.topic_id', 'topics.id')
+  //   .select([
+  //     'shows.*',
+  //     knex.raw('json_agg(topics.*) as topic')
+  //   ])
+  //   .groupBy('shows.id')
+  //   .then(data => res.json(data))
+  //   .catch(next)  
+  
+  // RAW SQL
+  knex.raw(`
+    SELECT Shows.*, json_agg(Topics.name) as topics 
+    FROM Shows
+    LEFT OUTER JOIN Shows_Topics
+    ON shows_topics.show_id = shows.id
+    LEFT OUTER JOIN Topics
+    ON shows_topics.topic_id = topics.id    
+    GROUP BY shows.id
+  `)
+  .then(data => res.json(data.rows))
+  .catch(next)
 }
 
 exports.create = function (req, res, next) {
@@ -34,6 +47,11 @@ exports.show = function (req, res, next) {
     .catch(next)
 };
 
+exports.name = function (req, res, next) {
+  Show.findBy('name', req.params.name)
+    .then(result => res.send(result))
+    .catch(next)
+}
 
 exports.update = function (req, res, next) {
   Show.update(req.params.id, req.body)
