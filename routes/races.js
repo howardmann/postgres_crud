@@ -31,11 +31,12 @@ let getRaces = () => {
 }
 
 let updateRacePlanet = (raceId, planetIdArr) => {
-  let updateQueryArr = planetIdArr.map(planetId => knex.raw(`INSERT INTO planets_races (race_id, planet_id) VALUES (${raceId}, ${planetId})`))
   return new Promise(resolve => {
-    if (planetIdArr.length === 0) {
-      resolve()
+    if (!planetIdArr) {
+      return resolve()
     }
+    
+    let updateQueryArr = planetIdArr.map(planetId => knex.raw(`INSERT INTO planets_races (race_id, planet_id) VALUES (${raceId}, ${planetId})`))    
     // Delete associations and then rebuild
     knex.raw(`DELETE FROM planets_races WHERE race_id = ${raceId}`)
       .then(() => Promise.all(updateQueryArr))

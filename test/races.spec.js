@@ -78,23 +78,41 @@ describe('#Races', function () {
 
   it('PUT /races/:id should update race and planet if given planet_id', function(done){
     chai.request(app)
-      .put('/races/1')
+      .put('/races/2')
       .send({
-        name: 'Zergz!',
+        name: 'Protosses!',
         planet_id: [1,2,3]
       })
       .end(function (err, res) {
         let input = res.body
         let actual = [{
-          id: 1,
-          name: 'Zergz!',
+          id: 2,
+          name: 'Protosses!',
           planets: ['Korhal', 'Char', 'Aiur'],
-          champions: ['Sarah Kerrigan']
+          champions: ['Artanis']
         }]
         expect(input).to.eql(actual)
         done();
-      });
-    
+      });    
+  })
+
+  it('PUT /races/:id should still update race and if planet_id is not given', function(done){
+    chai.request(app)
+      .put('/races/2')
+      .send({
+        name: 'Protosses Boom!'
+      })
+      .end(function (err, res) {
+        let input = res.body
+        let actual = [{
+          id: 2,
+          name: 'Protosses Boom!',
+          planets: ['Aiur'],
+          champions: ['Artanis']
+        }]
+        expect(input).to.eql(actual)
+        done();
+      });    
   })
 
 });
