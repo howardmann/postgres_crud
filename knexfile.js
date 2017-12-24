@@ -8,7 +8,7 @@
 module.exports = {
   test: {
     client: 'pg',
-    connection: 'postgres://localhost/mocha_chai_tv_shows_test',
+    connection: 'postgres://localhost/star_craft_test',
     migrations: {
       directory: __dirname + '/db/migrations'
     },
@@ -18,7 +18,7 @@ module.exports = {
   },
   development: {
     client: 'pg',
-    connection: 'postgres://localhost/mocha_chai_tv_shows',
+    connection: 'postgres://localhost/star_craft',
     migrations: {
       directory: __dirname + '/db/migrations'
     },
