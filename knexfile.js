@@ -5,6 +5,8 @@
 // Note: remember the semicolon syntax
 // # \q
 
+require('dotenv').config()
+
 module.exports = {
   test: {
     client: 'pg',
@@ -18,7 +20,13 @@ module.exports = {
   },
   development: {
     client: 'pg',
-    connection: 'postgres://localhost/star_craft',
+    connection: {
+      host: 'localhost',
+      user: 'howardmann',
+      password: null,
+      database: 'star_craft',
+      port: 5432
+    },
     migrations: {
       directory: __dirname + '/db/migrations'
     },
