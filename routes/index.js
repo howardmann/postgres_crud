@@ -6,9 +6,17 @@ router.get('/', (req, res, next) => {
   res.json({status: 'ok'})
 })
 // // Races CRUD
-var races = require('./races.js');
+let races = require('./races.js');
 router
   .get('/races', races.index)
+  .get('/races/:id', races.show)
+  .put('/races/:id', races.update)
+
+  // // Champions CRUD
+let champions = require('./champions.js');
+router
+  .get('/champions', champions.index)
+  .post('/champions', champions.create)
 
 
 module.exports = router;
